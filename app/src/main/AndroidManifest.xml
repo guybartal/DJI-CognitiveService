@@ -40,7 +40,7 @@
         <uses-library android:name="com.android.future.usb.accessory" />
         <meta-data
             android:name="com.dji.sdk.API_KEY"
-            android:value="2941d996a93f80db98149ffd" />
+            android:value="7cb78f4b03ca7745591ed08a" />
 
         <activity android:name=".MainActivity"
                   android:screenOrientation="sensorLandscape"

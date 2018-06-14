@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.microsoft.appcenter:appcenter-crashes-1.5.1">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/88b7c166cf605dd57db1c6ecdbcd33b6a8e49970/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/88b7c166cf605dd57db1c6ecdbcd33b6a8e49970/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.microsoft.appcenter/appcenter-crashes/1.5.1/7a04f1baaa003a609f64a8779a9f88501b5fb9cc/appcenter-crashes-1.5.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

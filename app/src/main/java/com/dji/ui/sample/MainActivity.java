@@ -5,9 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import com.microsoft.azure.mobile.MobileCenter;
-import com.microsoft.azure.mobile.analytics.Analytics;
-import com.microsoft.azure.mobile.crashes.Crashes;
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+
 /** Main activity that displays two choices to user */
 public class MainActivity extends Activity {
 
@@ -36,7 +37,7 @@ public class MainActivity extends Activity {
             });
         }
 
-        MobileCenter.start(getApplication(), "9fcf61d9-327e-4f26-8e0a-88ec60ff7452",
+        AppCenter.start(getApplication(), "e5d99874-9e0b-465b-a480-7a2d4e03502c",
                 Analytics.class, Crashes.class);
     }
 }

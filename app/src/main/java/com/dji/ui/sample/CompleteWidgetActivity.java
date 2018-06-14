@@ -116,16 +116,17 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
 
         initUI();
 
-        //Speech to Text Subscrption Key
-        sttSubscriptionKey = "...";
+        //Speech to Text Subscription Key
+        sttSubscriptionKey = "da6d8e3f-688a-4d75-a5f0-412b7a223422";
         //luis App Id & Subscription Key (get from luis.ai portal)
-        luisAppId="...";
-        luisSubscriptionId = "...";
-        speechLocale = "zh-CN";
+        luisAppId="481d442d-ea1a-4274-a212-b18c9378d63a";
+        luisSubscriptionId = "da6d8e3f-688a-4d75-a5f0-412b7a223422";
+        speechLocale = "en-US";
         //Custom Vision Prediction URL (get from Custom vision portal)
-        irisUrl = "https://southcentralus.api.cognitive.microsoft.com/customvision/v1.0/Prediction/.../image?iterationId=...";
+        irisUrl = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/41765292-196d-4060-8519-9379a48be1e1/image?iterationId=72caf992-a276-40f0-b253-ebfb40a418fe";
+
         //Custom Vision Key
-        irisKey = "[[Custom Vision Service Key]]";
+        irisKey = "6d600c50e8bc44618e3229ad06a695de";
 
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -142,10 +143,10 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                     int hour = mCalendar.get(Calendar.HOUR);
                     int apm = mCalendar.get(Calendar.AM_PM);
 
-                    speak((apm==0?"上午好":"下午好"));
+                    speak((apm==0?"good morning":"good afternoon"));
 
                 } else {
-                    Log.e("TTS", "Initilization Failed!");
+                    Log.e("TTS", "Initialization Failed!");
                 }
             }
         });
@@ -198,16 +199,16 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                 mLoop = !mLoop;
 
                 if(mLoop) {
-                    textStatus.setText("检测中");
+                    textStatus.setText("checking");
                     detectBtn.setImageResource(R.mipmap.stopaction);
                     detectObject();
                 }
                 else {
                     String status = textStatus.getText().toString();
-                    if(status.indexOf("检测中") >= 0)
-                        status = status.replace("检测中","已停止");
+                    if(status.indexOf("checking") >= 0)
+                        status = status.replace("checking","stopped");
                     else
-                        status = "已停止";
+                        status = "stopped";
                     textStatus.setText(status);
                     detectBtn.setImageResource(R.mipmap.findobj);
                 }
@@ -289,7 +290,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
             micClient.startMicAndRecognition();
         }catch (Exception ex){
             //System.out.println(ex.getMessage());
-            showToast("出错:" + ex.getMessage());
+            showToast("Error:" + ex.getMessage());
             Log.d("DjiDemo", ex.getMessage());
         }
     }
@@ -312,9 +313,9 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
         int avgLatency = (int) (detectTime/detectCount);
 
         if(mLoop)
-            textStatus.setText("检测中, " + detectCount + "次, 延迟:" + diffInSeconds + ",均值:" + avgLatency);
+            textStatus.setText("检测中, " + detectCount + "Time delay:" + diffInSeconds + ",Mean:" + avgLatency);
         else
-            textStatus.setText("已停止, " + detectCount + "次, 延迟:" + diffInSeconds + ",均值:" + avgLatency);
+            textStatus.setText("已停止, " + detectCount + "Time delay:" + diffInSeconds + ",Mean:" + avgLatency);
 
         //textStatus.setText("Found Objects: " + result);
         textResult.setText(result);
@@ -342,8 +343,8 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
     public void DetectFace(Bitmap imageBitmap) {
 
         //Cognitive Service - Face API subscription Key
-        String subscriptionKey = "...";
-        String uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0";
+        String subscriptionKey = "b758a95fb4df4686804b4af57b9f7972";
+        String uriBase = "https://southcentralus.api.cognitive.microsoft.com/face/v1.0";
         String requestParameters = "returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=age,gender,smile,emotion";
 
         final FaceServiceClient faceServiceClient = new FaceServiceRestClient(uriBase,subscriptionKey);
@@ -356,7 +357,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                     @Override
                     protected Face[] doInBackground(InputStream... params) {
                         try {
-                            publishProgress("正在检测照片中的人脸...");
+                            publishProgress("Detecting faces in photos...");
                             //String faceAttr = "age,gender,smile,emotion";
                             FaceServiceClient.FaceAttributeType[] faceAttr = new FaceServiceClient.FaceAttributeType[]{
                                     FaceServiceClient.FaceAttributeType.Age,
@@ -372,11 +373,11 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                             );
                             if (result == null || result.length == 0)
                             {
-                                publishProgress("照片中没有发现人");
+                                publishProgress("No one is found in the photo");
                                 return null;
                             }
                             else{
-                                String text = "检测结束，照片中有" + ((result.length == 2) ? "两":result.length) + "个人";
+                                String text = "The end of the test, there are photos" + ((result.length == 2) ? "Two":result.length) + "personal";
                                 List<UUID> faceIds = new ArrayList<UUID>();
                                 int smile = 0;
                                 for(int i=0; i< result.length; i++){
@@ -389,15 +390,15 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                                 if(smile == result.length)
                                 {
                                     if(smile > 1)
-                                        text+= "，都笑得很开心";
+                                        text+= "，All smiled very happy";
                                     else
-                                        text+= "，笑得很开心";
+                                        text+= "，I am very happy";
                                 }
 
                                 else if(smile/result.length > 0.5)
-                                    text+= "，大部分人都笑得很开心";
+                                    text+= "，Most people laugh very happily";
                                 else if(smile>0)
-                                    text+= "，有" + ((smile == 2) ? "两":smile) + "个人笑得很开心";
+                                    text+= "，Have" + ((smile == 2) ? "Two":smile) + "Personally happy smiling";
 
                                 //publishProgress(text);
 
@@ -423,7 +424,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                                     }
                                 }
                                 if(!identifiedPerson.equals("，"))
-                                    identifiedPerson += "在照片中";
+                                    identifiedPerson += "In the photo";
 
                                 publishProgress(text + identifiedPerson);
                             }
@@ -431,7 +432,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                             //publishProgress(String.format("Detection Finished. %d face(s) detected", result.length));
                             return result;
                         } catch (Exception e) {
-                            publishProgress("检测失败了");
+                            publishProgress("Failed to detect");
                             showToast(e.getMessage());
                             return null;
                         }
@@ -487,7 +488,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
 
             controlFlight(intent,"");
         }catch (Exception ex){
-            textResult.setText("语音识别出错");
+            textResult.setText("Speech recognition error");
             showToast(ex.getMessage());
         }
     }
@@ -594,7 +595,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                 });
             }
             if(command.equals("Photo")){
-                speak("开始拍照");
+                speak("Start taking pictures");
                 final dji.sdk.camera.Camera camera = aircraft.getCamera();
                 if (camera != null) {
                     SettingsDefinitions.CameraMode mode = SettingsDefinitions.CameraMode.SHOOT_PHOTO;
@@ -607,7 +608,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                                         @Override
                                         public void onResult(DJIError djiError) {
                                             if (null == djiError) {
-                                                showToast("拍照成功");
+                                                showToast("Photographed successfully");
                                             } else {
                                                 showToast(djiError.getDescription());
                                             }
@@ -617,10 +618,10 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                                 }
                             });
                 } else {
-                    showToast("无法获取飞机相机");
+                    showToast("Unable to obtain aircraft camera");
                 }
             }else if(command.equals("Landing")){
-                speak("开始降落");
+                speak("Start landing");
                 aircraft.getFlightController().startLanding(new CommonCallbacks.CompletionCallback() {
                     @Override
                     public void onResult(DJIError djiError) {
@@ -632,7 +633,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                     }
                 });
             }else if(command.equals("TakeOff")){
-                speak("开始起飞");
+                speak("Start to take off");
                 aircraft.getFlightController().startTakeoff(new CommonCallbacks.CompletionCallback() {
                     @Override
                     public void onResult(DJIError djiError) {
@@ -644,7 +645,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                     }
                 });
             }else if(command.equals("Up")) {
-                speak("上升高度");
+                speak("Rise height");
                 float throttleJoyStickControlMaxSpeed = 3;
                 //mYaw = (float)(yawJoyStickControlMaxSpeed * pX);
                 //mThrottle = (float)(yawJoyStickControlMaxSpeed * pY);
@@ -659,7 +660,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                         }
                 );
             }else if(command.equals("Down")) {
-                speak("下降高度");
+                speak("Drop height");
                 float throttleJoyStickControlMaxSpeed = 3;
                 //mYaw = (float)(yawJoyStickControlMaxSpeed * pX);
                 //mThrottle = (float)(yawJoyStickControlMaxSpeed * pY);
@@ -674,15 +675,15 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                         }
                 );
             }else if(command.equals("Rotate")) {
-                speak("旋转机身");
+                speak("Rotating body");
                 showToast("under implementation");
             }else if(command.equals("Video")) {
-                speak("开始录视频");
+                speak("Start recording video");
                 showToast("under implementation");
             }
         }
         else
-            showToast("飞机无连接");
+            showToast("No connection to the aircraft");
     }
 
     public class CSIRISDetectTask extends AsyncTask<String, Void, String> {
@@ -704,9 +705,6 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
 
                 request.setHeader("Content-Type", "application/octet-stream");
                 request.setHeader("Prediction-Key", irisKey);
-                if(mProxy)
-                    request.setHeader("url", predictionUrl);
-                //request.setHeader("Ocp-Apim-Subscription-Key", cognitiveServicesAPIKey);
 
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
                 mBitmap.compress(Bitmap.CompressFormat.JPEG, 80, output);
@@ -726,7 +724,7 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                     {
                         JSONObject tag = tags.getJSONObject(i);
                         String tagName = tag.getString("Tag");
-                        if(tagName.equals("Fanta"))
+                        if(tagName.equals("bottle"))
                         {
                             probility = tag.getDouble("Probability");
                             break;
@@ -734,16 +732,16 @@ public class CompleteWidgetActivity extends Activity implements View.OnClickList
                     }
 
                     NumberFormat fmt = NumberFormat.getPercentInstance();
-                    fmt.setMaximumFractionDigits(2);//最多两位百分小数，如25.23%
+                    fmt.setMaximumFractionDigits(2);//Up to two decimal places, such as 25.23%
                     if(probility > 0.3) {
-                        result = "找到芬达: " + fmt.format(probility);
+                        result = "Find object: " + fmt.format(probility);
                         if(player.isPlaying())
                             player.stop();
                         player.start();
-                        speak("照片中有芬达");
+                        speak("Object detected in the photo");
                     }
                     else
-                        result = "没有找到: " + fmt.format(probility);
+                        result = "Can't find object: " + fmt.format(probility);
                 }
                 else{
                     result = "Error Prediction Response.";

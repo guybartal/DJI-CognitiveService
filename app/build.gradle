@@ -11,7 +11,7 @@ android {
         versionName "4.1.1"
         multiDexEnabled true
         ndk{
-            abiFilters "armeabi-v7a"
+
         }
     }
     buildTypes {
@@ -30,9 +30,9 @@ android {
 
 dependencies {
     //compile fileTree(include: ['*.jar'], dir: 'libs')
-    def mobileCenterSdkVersion = '0.10.0'
-    compile "com.microsoft.azure.mobile:mobile-center-analytics:${mobileCenterSdkVersion}"
-    compile "com.microsoft.azure.mobile:mobile-center-crashes:${mobileCenterSdkVersion}"
+    def appCenterSdkVersion = '1.5.1'
+    compile "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+    compile "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
     compile fileTree(dir: 'libs', include: ['.jar','.so'])
     testCompile 'junit:junit:4.12'
     compile project(':android-uilib-release')
